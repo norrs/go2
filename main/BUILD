@@ -17,7 +17,7 @@ java_library(
     ),
     resources = glob([
            'webapp/**/*.html',
-           'resources/**/*.ftl',
+           'resources/**/*',
     ]),
     deps = [
 #        ':generated',

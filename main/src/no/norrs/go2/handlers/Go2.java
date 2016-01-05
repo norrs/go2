@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -28,10 +29,9 @@ public class Go2 extends HttpServlet {
                       HttpServletResponse response) throws IOException,
             ServletException {
 
-        Logger.getLogger(getClass().toString()).log(Level.WARNING, "JODA");
-
         // strip leading / and lower case it
         String pathInfo = request.getPathInfo().substring(1).toLowerCase();
+        Logger.getLogger(getClass().toString()).log(Level.WARNING, "pathInfo: " + pathInfo);
 
         int slashIndex = pathInfo.indexOf("/");
         boolean askToRedirect = false;
@@ -47,11 +47,25 @@ public class Go2 extends HttpServlet {
         Jedis jedis = new Jedis("localhost");
         String redirectTarget = jedis.get(pathInfo);
 
-        if (redirectTarget != null && !askToRedirect) {
+        if (pathInfo.equals("")) {
+
+            Template temp = TemplateConfig.getInstance().getTemplate("index.ftl");
+
+            Writer out = new OutputStreamWriter(response.getOutputStream());
+            try {
+                Map root = new HashMap();
+                temp.process(root, out);
+            } catch (TemplateException e) {
+                e.printStackTrace();
+                throw new IOException(e);
+            }
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.setContentType("text/html; charset=utf-8");
+        } else if (redirectTarget != null && !askToRedirect) {
             response.setContentType("text/plain; charset=utf-8");
             response.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
             response.sendRedirect(redirectTarget);
-        } else if(askToRedirect) {
+        } else if (redirectTarget != null && askToRedirect) {
             response.setContentType("text/html; charset=utf-8");
             response.setStatus(HttpServletResponse.SC_FOUND);
 
