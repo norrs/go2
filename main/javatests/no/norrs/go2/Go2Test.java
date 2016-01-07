@@ -24,9 +24,6 @@ import java.util.logging.Logger;
 
 public class Go2Test extends AbstractHttpClientServerTest {
 
-    @Rule
-    public TestingDir testdir = new TestingDir();
-
     public Go2Test(SslContextFactory sslContextFactory) {
         //super(sslContextFactory);
         super(null);
