@@ -1,26 +1,17 @@
-package no.norrs.go2;
+package no.norrs.go2.systemtests;
 
 
 import no.norrs.go2.handlers.Go2;
 import no.norrs.go2.handlers.Register;
-import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.api.Response;
-import org.eclipse.jetty.client.api.Result;
-import org.eclipse.jetty.client.util.StringContentProvider;
 import org.eclipse.jetty.servlet.ServletHandler;
-import org.eclipse.jetty.toolchain.test.TestingDir;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Go2Test extends AbstractHttpClientServerTest {
 

@@ -19,7 +19,7 @@
 // package org.eclipse.jetty.client;
 // Not found packaged in jar file, so copy paste here.
 
-package no.norrs.go2;
+package no.norrs.go2.systemtests;
 
 
 
