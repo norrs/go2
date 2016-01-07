@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -49,11 +48,13 @@ public class Go2 extends HttpServlet {
 
         if (pathInfo.equals("")) {
 
-            Template temp = TemplateConfig.getInstance().getTemplate("index.ftl");
+            Template temp = TemplateConfig.freemarker().getTemplate("index.ftl");
 
             Writer out = new OutputStreamWriter(response.getOutputStream());
             try {
                 Map root = new HashMap();
+                root.put("globals", TemplateConfig.globalTemplateVariables());
+                Logger.getLogger(getClass().toString()).log(Level.SEVERE, "size: " +TemplateConfig.globalTemplateVariables().size());
                 temp.process(root, out);
             } catch (TemplateException e) {
                 e.printStackTrace();
@@ -73,8 +74,9 @@ public class Go2 extends HttpServlet {
             Map root = new HashMap();
             root.put("pathInfo", pathInfo);
             root.put("redirectTarget", redirectTarget);
+            root.put("globals", TemplateConfig.globalTemplateVariables());
             /* Get the template (uses cache internally) */
-            Template temp = TemplateConfig.getInstance().getTemplate("redirect.ftl");
+            Template temp = TemplateConfig.freemarker().getTemplate("redirect.ftl");
 
             //response.getWriter().append("Could not find any redirect on: ").append(pathInfo);
 
@@ -93,9 +95,10 @@ public class Go2 extends HttpServlet {
             /* Create a data-model */
             Map root = new HashMap();
             root.put("pathInfo", pathInfo);
+            root.put("globals", TemplateConfig.globalTemplateVariables());
 
             /* Get the template (uses cache internally) */
-            Template temp = TemplateConfig.getInstance().getTemplate("not_found.ftl");
+            Template temp = TemplateConfig.freemarker().getTemplate("not_found.ftl");
 
             //response.getWriter().append("Could not find any redirect on: ").append(pathInfo);
 

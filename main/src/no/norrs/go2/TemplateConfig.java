@@ -4,8 +4,10 @@ package no.norrs.go2;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateExceptionHandler;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -15,14 +17,12 @@ import java.util.logging.Logger;
 public class TemplateConfig {
     private static Map<String, String> templateConfigVariables = null;
     private static Configuration freemarkerConfig = null;
-    private static TemplateConfig instance = null;
 
     protected TemplateConfig() {
     }
 
-    public static TemplateConfig getInstance() throws IOException {
-        if (instance == null) {
-            instance = new TemplateConfig();
+    public static Configuration freemarker() throws IOException {
+        if (freemarkerConfig == null) {
             /* ------------------------------------------------------------------------ */
             /* You should do this ONLY ONCE in the whole application life-cycle:        */
             /* Create and adjust the configuration singleton */
@@ -34,36 +34,43 @@ public class TemplateConfig {
             //freemarkerConfig.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
             freemarkerConfig.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
 
-            templateConfigVariables = TemplateConfig.getTemplateConfigVariables();
+
         }
-        return instance;
+        return freemarkerConfig;
     }
 
-    private static Map<String, String> getTemplateConfigVariables() {
-        String propFileName = System.getenv("CONFIG_FILE");
-        if (propFileName == null) {
-            propFileName = "config.properties";
-        }
-
-
-        try {
-            Properties prop = new Properties();
-
-
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
-            if (inputStream != null) {
-                prop.load(inputStream);
+    public static Map<String, String> globalTemplateVariables() {
+        if (templateConfigVariables == null) {
+            String propFileName = System.getenv("GO2_CONFIG_FILE");
+            if (propFileName == null) {
+                propFileName = "config.properties";
             }
-            Map<String, String> map = new HashMap<String, String>();
-            for (final String name: prop.stringPropertyNames()) {
-                map.put(name, prop.getProperty(name));
-            }
-            return map;
 
-        } catch (IOException e) {
-            Logger.getLogger(getClass().getName()).log(Level.CONFIG, "Could not load configuration file: " + propFileName);
+            try {
+                Properties prop = new Properties();
+
+
+                //InputStream inputStream = TemplateConfig.class.getClassLoader().getResourceAsStream(propFileName);
+                InputStream inputStream = new FileInputStream(propFileName);
+                try {
+                    prop.load(inputStream);
+                    Map<String, String> map = new HashMap<String, String>();
+                    for (final String name: prop.stringPropertyNames()) {
+                        map.put(name, prop.getProperty(name));
+                    }
+                    Logger.getLogger(TemplateConfig.class.getName()).log(Level.SEVERE, "Loaded: " + propFileName + ", with " + prop.size() + " config values");
+                    templateConfigVariables = map;
+                } catch(IOException ioException) {
+                    Logger.getLogger(TemplateConfig.class.getName()).log(Level.SEVERE, "Could not find configuration file: " + propFileName, ioException);
+                    templateConfigVariables = Collections.emptyMap();
+                }
+
+            } catch (IOException e) {
+                Logger.getLogger(TemplateConfig.class.getName()).log(Level.SEVERE, "Could not load configuration file: " + propFileName);
+                templateConfigVariables = Collections.emptyMap();
+            }
         }
-        return null;
+        return templateConfigVariables;
     }
 
 

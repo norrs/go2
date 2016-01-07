@@ -33,7 +33,7 @@
               crossorigin="anonymous">
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="s\/jquery.min.js"><\/script>')</script>
+        <script>window.jQuery || document.write('<script src="\/s\/jquery.min.js"><\/script>')</script>
 
         <!-- Latest compiled and minified JavaScript -->
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
@@ -41,7 +41,7 @@
                 crossorigin="anonymous"></script>
 
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-        <link href="s/ie10-viewport-bug-workaround.css" rel="stylesheet">
+        <link href="/s/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
         <!-- Custom styles for this template -->
         <link href="/s/cover.css" rel="stylesheet">
@@ -92,7 +92,7 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    >
+
     <script src="/s/bootstrap.min.js"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="/s/ie10-viewport-bug-workaround.js"></script>

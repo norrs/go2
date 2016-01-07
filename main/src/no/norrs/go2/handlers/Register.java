@@ -40,9 +40,10 @@ public class Register
         Map root = new HashMap();
         root.put("pathInfo", shortName);
         root.put("redirectTarget", target);
+        root.put("globals", TemplateConfig.globalTemplateVariables());
 
         /* Get the template (uses cache internally) */
-        Template temp = TemplateConfig.getInstance().getTemplate("redirect.ftl");
+        Template temp = TemplateConfig.freemarker().getTemplate("redirect.ftl");
 
 
         Writer out = new OutputStreamWriter(response.getOutputStream());
