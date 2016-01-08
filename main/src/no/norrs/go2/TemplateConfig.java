@@ -62,15 +62,22 @@ public class TemplateConfig {
                     templateConfigVariables = map;
                 } catch(IOException ioException) {
                     Logger.getLogger(TemplateConfig.class.getName()).log(Level.SEVERE, "Could not find configuration file: " + propFileName, ioException);
-                    templateConfigVariables = Collections.emptyMap();
+
+                    templateConfigVariables = getDefaultConfig();
                 }
 
             } catch (IOException e) {
                 Logger.getLogger(TemplateConfig.class.getName()).log(Level.SEVERE, "Could not load configuration file: " + propFileName);
-                templateConfigVariables = Collections.emptyMap();
+                templateConfigVariables = getDefaultConfig();
             }
         }
         return templateConfigVariables;
+    }
+
+    protected static Map<String, String> getDefaultConfig() {
+        Map<String, String> defaultConfig = new HashMap<String, String>();
+        defaultConfig.put("main_vhost", "localhost");
+        return defaultConfig;
     }
 
 
