@@ -64,7 +64,7 @@ public class Go2 extends HttpServlet {
             response.setContentType("text/html; charset=utf-8");
         } else if (redirectTarget != null && !askToRedirect) {
             response.setContentType("text/plain; charset=utf-8");
-            response.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
+            response.setStatus(HttpServletResponse.SC_FOUND);
             response.sendRedirect(redirectTarget);
         } else if (redirectTarget != null && askToRedirect) {
             response.setContentType("text/html; charset=utf-8");
