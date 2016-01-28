@@ -49,6 +49,7 @@ public class Register
         Map root = new HashMap();
         root.put("pathInfo", shortName);
         root.put("redirectTarget", target);
+        root.put("scheme", request.getScheme());
         root.put("globals", TemplateConfig.globalTemplateVariables());
 
         /* Get the template (uses cache internally) */

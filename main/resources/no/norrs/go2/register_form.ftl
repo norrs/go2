@@ -3,7 +3,7 @@
         <label for="shortName">Your memorizable URL</label>
 
         <div class="input-group">
-            <span class="input-group-addon" id="basic-addon2">http://${globals.main_vhost}/</span>
+            <span class="input-group-addon" id="basic-addon2">${scheme}://${globals.main_vhost}/</span>
             <input type="text" class="form-control" id="shortName" name="shortName" aria-describedby="basic-addon3"
             <#if pathInfo??>
                 value="${pathInfo}"

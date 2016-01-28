@@ -3,6 +3,9 @@ package no.norrs.go2;
 import no.norrs.go2.handlers.Go2;
 import no.norrs.go2.handlers.Register;
 import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.ForwardedRequestCustomizer;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.*;
@@ -24,7 +27,12 @@ public class Main {
 
     public Main(Options options) throws Exception {
         Server server = new Server();
-        ServerConnector serverConnector = new ServerConnector(server);
+
+        HttpConfiguration config = new HttpConfiguration();
+        config.addCustomizer(new ForwardedRequestCustomizer());
+        HttpConnectionFactory http = new HttpConnectionFactory(config);
+
+        ServerConnector serverConnector = new ServerConnector(server, http);
 
         serverConnector.setPort(options.port);
 

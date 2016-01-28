@@ -61,6 +61,7 @@ public class Go2 extends HttpServlet {
             Writer out = new OutputStreamWriter(response.getOutputStream());
             try {
                 Map root = new HashMap();
+                root.put("scheme", request.getScheme());
                 root.put("globals", TemplateConfig.globalTemplateVariables());
                 Logger.getLogger(getClass().toString()).log(Level.SEVERE, "size: " +TemplateConfig.globalTemplateVariables().size());
                 temp.process(root, out);
@@ -82,6 +83,7 @@ public class Go2 extends HttpServlet {
             Map root = new HashMap();
             root.put("pathInfo", pathInfo);
             root.put("redirectTarget", redirectTarget);
+            root.put("scheme", request.getScheme());
             root.put("globals", TemplateConfig.globalTemplateVariables());
             /* Get the template (uses cache internally) */
             Template temp = TemplateConfig.freemarker().getTemplate("redirect.ftl");
@@ -103,6 +105,7 @@ public class Go2 extends HttpServlet {
             /* Create a data-model */
             Map root = new HashMap();
             root.put("pathInfo", pathInfo);
+            root.put("scheme", request.getScheme());
             root.put("globals", TemplateConfig.globalTemplateVariables());
 
             /* Get the template (uses cache internally) */
