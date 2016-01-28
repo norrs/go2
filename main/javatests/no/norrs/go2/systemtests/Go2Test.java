@@ -6,25 +6,51 @@ import no.norrs.go2.handlers.Register;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.api.Response;
 import org.eclipse.jetty.servlet.ServletHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+import redis.embedded.RedisExecProvider;
+import redis.embedded.RedisServer;
 
 import javax.servlet.http.HttpServletResponse;
+import java.net.InetSocketAddress;
 import java.util.Date;
 
 public class Go2Test extends AbstractHttpClientServerTest {
+
+
+    private RedisServer redisServer;
+    private int redisPort;
 
     public Go2Test(SslContextFactory sslContextFactory) {
         //super(sslContextFactory);
         super(null);
     }
 
+    @Before
+    public void setUp() throws Exception {
+        redisPort = TestUtils.findFreePort();
+        redisServer = RedisServer.builder()
+                .redisExecProvider(RedisExecProvider.defaultProvider())
+                .port(redisPort)
+                .build();
+        redisServer
+                .start();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        redisServer.stop();
+        redisServer = null;
+    }
 
     @Test
     public void test_NoRedirectTarget() throws Exception {
         ServletHandler handler = new ServletHandler();
-        handler.addServletWithMapping(Go2.class, "/*");
+        handler.addServletWithMapping(new ServletHolder(new Go2("localhost:" + String.valueOf(redisPort))), "/*");
         start(handler);
 
         Response response = client.GET(scheme + "://localhost:" + connector.getLocalPort() + "/testrandomNoRedirectTarget" + new Date().getTime());
@@ -36,8 +62,8 @@ public class Go2Test extends AbstractHttpClientServerTest {
     @Test
     public void test_RegisterAndVisitShortName() throws Exception {
         ServletHandler handler = new ServletHandler();
-        handler.addServletWithMapping(Register.class, "/register");
-        handler.addServletWithMapping(Go2.class, "/*");
+        handler.addServletWithMapping(new ServletHolder(new Register("localhost:" + redisPort)), "/register");
+        handler.addServletWithMapping(new ServletHolder(new Go2("localhost:" + redisPort)), "/*");
         start(handler);
 
         String shortName = "testRegisterAndVisitShortName" + new Date().getTime();
@@ -65,8 +91,8 @@ public class Go2Test extends AbstractHttpClientServerTest {
     @Test
     public void test_RegisterAndVisitShortName_Option_ViewRedirectLink() throws Exception {
         ServletHandler handler = new ServletHandler();
-        handler.addServletWithMapping(Register.class, "/register");
-        handler.addServletWithMapping(Go2.class, "/*");
+        handler.addServletWithMapping(new ServletHolder(new Register("localhost:" + redisPort)), "/register");
+        handler.addServletWithMapping(new ServletHolder(new Go2("localhost:" + redisPort)), "/*");
         start(handler);
 
         String shortName = "testRegisterAndVisitShortNameViewRedirectLink" + new Date().getTime();

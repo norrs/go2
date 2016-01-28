@@ -57,6 +57,13 @@ maven_jar(
     sha1 = "f2237b1705fcac83cedf8390eb4b29ac845cde1c",
 )
 
+# com.github.kstyrc:embedded-redis:jar:0.6
+maven_jar(
+    name = "commons-io_commons-io",
+    artifact = "commons-io:commons-io:2.4",
+    sha1 = "b1b6ea3b7e4aa4f492509a4952029cd8e48019ad",
+)
+
 # org.eclipse.jetty:jetty-rewrite:jar:9.2.2.v20140723
 # org.eclipse.jetty:jetty-server:jar:9.2.2.v20140723
 maven_jar(
@@ -78,6 +85,13 @@ maven_jar(
     name = "org.apache.commons_commons-pool2",
     artifact = "org.apache.commons:commons-pool2:2.3",
     sha1 = "62a559a025fd890c30364296ece14643ba9c8c5b",
+)
+
+# no.norrs.go2:go2:jar:0.0.1
+maven_jar(
+    name = "com.github.kstyrc_embedded-redis",
+    artifact = "com.github.kstyrc:embedded-redis:0.6",
+    sha1 = "6124166f187075d330dbe432720ec5bccb873b61",
 )
 
 # org.eclipse.jetty.toolchain:jetty-test-helper:jar:3.1
@@ -213,6 +227,13 @@ maven_jar(
     artifact = "org.eclipse.jetty:jetty-security:9.2.2.v20140723",
     repository = "https://oss.sonatype.org/content/groups/jetty/",
     sha1 = "b66f8f4b9afd82af24b9f7ffcd5312eb628ee0c9",
+)
+
+# com.github.kstyrc:embedded-redis:jar:0.6
+maven_jar(
+    name = "com.google.guava_guava",
+    artifact = "com.google.guava:guava:18.0",
+    sha1 = "cce0823396aa693798f8882e64213b1772032b09",
 )
 
 # com.google.http-client:google-http-client:jar:1.20.0

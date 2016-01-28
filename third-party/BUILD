@@ -10,6 +10,15 @@ java_library(
     ],
 )
 java_library(
+    name = "com.github.kstyrc_embedded-redis",
+    visibility = ["//visibility:public"],
+    exports = [
+        "@com.github.kstyrc_embedded-redis//jar",
+        "@com.google.guava_guava//jar",
+        "@commons-io_commons-io//jar",
+    ],
+)
+java_library(
     name = "com.github.spullara.mustache.java_compiler",
     visibility = ["//visibility:public"],
     exports = [

@@ -79,5 +79,6 @@ java_test(
         #"//third-party:org.eclipse.jetty_jetty-util",
         "//third-party:org.eclipse.jetty_jetty-servlets",
         "//third-party:org.eclipse.jetty_jetty-servlet",
+        "//third-party:com.github.kstyrc_embedded-redis",
     ],
 )
