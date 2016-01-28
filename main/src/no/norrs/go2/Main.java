@@ -55,12 +55,7 @@ public class Main {
         filesCtx.setContextPath("/s/");
         ResourceHandler rh = new ResourceHandler();
         //rh.setWelcomeFiles(new String[]{"hud.html"});
-        try {
-            rh.setBaseResource(Resource.newResource("main/resources/no/norrs/go2/static/", true));
-        } catch (IOException e) {
-            System.out.println("stacktrace here");
-            e.printStackTrace();
-        }
+        rh.setBaseResource(Resource.newClassPathResource("main/resources/no/norrs/go2/static/", true, false));
         filesCtx.setHandler(rh);
         contextCollection.addHandler(filesCtx);
 
