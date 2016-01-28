@@ -23,7 +23,8 @@ java_library(
 #        ':generated',
 #        '//external:thrift-j2-core',
 #        '//external:thrift-j2-jax-rs',
-        '//third-party:javax.servlets',
+#        '//third-party:javax.servlets',
+        '//third-party:args4j_args4j',
         '//third-party:org.eclipse.jetty_jetty-servlet',
         '//third-party:org.eclipse.jetty_jetty-servlets',
         '//third-party:org.eclipse.jetty_jetty-rewrite',
@@ -39,7 +40,9 @@ java_binary(
     srcs = ['src/no/norrs/go2/Main.java'],
     deps = [
         ':libgo2',
-        '//third-party:javax.servlets',
+         '//third-party:args4j_args4j',
+#        '//third-party:javax.servlets',
+         '//third-party:org.slf4j_slf4j-api',
         '//third-party:org.eclipse.jetty_jetty-rewrite',
         '//third-party:org.eclipse.jetty_jetty-servlet',
         '//third-party:org.eclipse.jetty_jetty-servlets',
@@ -53,7 +56,6 @@ java_library(
     srcs = glob(["javatests/**/Abstract*.java"]),
     deps = [
         "//third-party:org.eclipse.jetty.toolchain_jetty-test-helper",
-        '//third-party:javax.servlets',
         '//third-party:org.eclipse.jetty_jetty-rewrite',
         '//third-party:org.eclipse.jetty_jetty-servlet',
         '//third-party:org.eclipse.jetty_jetty-servlets',

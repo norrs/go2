@@ -7,7 +7,11 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.*;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.resource.Resource;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,17 +20,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
+    private final static org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
-    public static void main(String[] args) throws Exception {
+    public Main(Options options) throws Exception {
         Server server = new Server();
         ServerConnector serverConnector = new ServerConnector(server);
 
-        String port = System.getenv("PORT");
-        if (port != null) {
-            serverConnector.setPort(Integer.valueOf(port));
-        } else {
-            serverConnector.setPort(8080);
-        }
+        serverConnector.setPort(options.port);
 
         server.setConnectors(new Connector[]
                 {serverConnector});
@@ -45,8 +45,9 @@ public class Main {
         jersey.setInitParameter("javax.ws.rs.Application", UriTemplateApplication.class.getName());
         jersey.setInitOrder(0);*/
         servletCtxHandler.setContextPath("/*");
-        servletCtxHandler.addServlet(Go2.class, "/*");
-        servletCtxHandler.addServlet(Register.class, "/register");
+
+        servletCtxHandler.addServlet(new ServletHolder(new Go2(options.redis)), "/*");
+        servletCtxHandler.addServlet(new ServletHolder(new Register(options.redis)), "/register");
         servletCtxHandler.addServlet(StatusZServlet.class, "/statusz");
 
         // File handler
@@ -72,6 +73,41 @@ public class Main {
         server.dumpStdErr();
         server.join();
     }
+
+    public static void main(String[] args) {
+        String logLevelApp = System.getProperty("org.slf4j.simpleLogger.log.no.norrs", "trace");
+        System.setProperty("org.slf4j.simpleLogger.log.no.norrs", logLevelApp);
+        System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "info");
+
+        Options options = new Options();
+        CmdLineParser parser = new CmdLineParser(options);
+
+        try {
+            parser.parseArgument(args);
+
+            if (options.help) {
+                parser.printSingleLineUsage(System.out);
+                System.out.println();
+                System.out.println();
+                parser.printUsage(System.out);
+            } else {
+                new Main(options);
+            }
+        } catch (CmdLineException ex) {
+            System.out.flush();
+            System.err.println();
+            parser.printSingleLineUsage(System.err);
+            System.err.println();
+            System.err.println();
+            parser.printUsage(System.err);
+            System.exit(1);
+        }  catch (Exception e) {
+            LOGGER.error(" --- Exception ---", e);
+            System.exit(3);
+        }
+        System.exit(0);
+    }
+
 
 }
 

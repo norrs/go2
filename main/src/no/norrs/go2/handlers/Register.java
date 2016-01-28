@@ -18,15 +18,24 @@ import javax.servlet.http.HttpServletResponse;
 public class Register
         extends HttpServlet {
 
-    public Register() {
+    private final String redisHost;
+    private final Integer redisPort;
 
+    public Register(String redis) {
+        String[] tmp = redis.split(":");
+        this.redisHost = tmp[0];
+        if (tmp.length == 2) {
+            this.redisPort = Integer.valueOf(tmp[1]);
+        } else {
+            this.redisPort = 6379;
+        }
     }
 
     public void doPost( HttpServletRequest request,
                        HttpServletResponse response) throws IOException,
                                                             ServletException {
 
-        Jedis jedis = new Jedis("localhost");
+        Jedis jedis = new Jedis(redisHost, redisPort);
 
         String shortName = request.getParameter("shortName").trim().toLowerCase();
         String target = request.getParameter("redirectTarget");

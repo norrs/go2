@@ -19,9 +19,17 @@ import java.util.logging.Logger;
 
 
 public class Go2 extends HttpServlet {
-    public Go2() {
+    private final int redisPort;
+    private final String redisHost;
 
-
+    public Go2(String redis) {
+        String[] tmp = redis.split(":");
+        this.redisHost = tmp[0];
+        if (tmp.length == 2) {
+            this.redisPort = Integer.valueOf(tmp[1]);
+        } else {
+            this.redisPort = 6379;
+        }
     }
 
     public void doGet(HttpServletRequest request,
@@ -43,7 +51,7 @@ public class Go2 extends HttpServlet {
         }
 
 
-        Jedis jedis = new Jedis("localhost");
+        Jedis jedis = new Jedis(redisHost, redisPort);
         String redirectTarget = jedis.get(pathInfo);
 
         if (pathInfo.equals("")) {
